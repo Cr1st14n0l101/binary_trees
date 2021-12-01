@@ -1,28 +1,12 @@
 #include "binary_trees.h"
+#include <stdbool.h>
 
 /**
- * binary_tree_balance - Measures the balance factor of a binary tree
- * @tree: Pointer to the root node of the tree to measure the balance factor
- * Return: The balance factor
+ * binary_tree_depth - measures the depth of a node in binary tree
+ * @tree: Pointer to the root node of the tree to measure the depth
+ * Return: The detph
  */
-int binary_tree_balance(const binary_tree_t *tree)
-{
-	int height_l = 0, height_r = 0;
-
-	if (!tree)
-		return (0);
-
-	height_l = tree->left ? (int)binary_tree_height(tree->left) : -1;
-	height_r = tree->right ? (int)binary_tree_height(tree->right) : -1;
-	return (height_l - height_r);
-}
-
-/**
- * binary_tree_height - Measures the height of a binary tree
- * @tree: Pointer to the root node of the tree to measure the balance factor
- * Return: height of the tree
- */
-size_t binary_tree_height(const binary_tree_t *tree)
+size_t binary_tree_depth(const binary_tree_t *tree)
 {
 	size_t height_l = 0;
 	size_t height_r = 0;
@@ -30,9 +14,26 @@ size_t binary_tree_height(const binary_tree_t *tree)
 	if (!tree)
 		return (0);
 
-	height_l = tree->left ? 1 + binary_tree_height(tree->left) : 0;
-	height_r = tree->right ? 1 + binary_tree_height(tree->right) : 0;
+	height_l = tree->left ? 1 + binary_tree_depth(tree->left) : 0;
+	height_r = tree->right ? 1 + binary_tree_depth(tree->right) : 0;
 	return (height_l > height_r ? height_l : height_r);
+}
+
+bool is_perfect(const binary_tree_t *root, int depth, int level) 
+{
+    // Check if the tree is empty
+  if (root == NULL)
+    return (true);
+
+  // Check the presence of children
+  if (root->left == NULL && root->right == NULL)
+	return (depth == level + 1 ? false : true);
+
+  if (root->left == NULL || root->right == NULL)
+    return (false);
+
+  return is_perfect(root->left, depth, level + 1) &&
+       is_perfect(root->right, depth, level + 1);
 }
 
 /**
@@ -42,10 +43,16 @@ size_t binary_tree_height(const binary_tree_t *tree)
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
+	int depth = 0;
+
 	if (!tree)
 		return (0);
-
-	if (binary_tree_balance(tree->left) == binary_tree_balance(tree->right))
+		
+	depth = binary_tree_depth(tree);
+	printf("%d, %d\n", is_perfect(tree, depth, 0), depth);
+	if (is_perfect(tree, depth, 0) == true)
 		return (1);
+	else
+		return (0);
 	return (0);
 }
