@@ -49,4 +49,9 @@ binary_tree_t *binary_tree_uncle(binary_tree_t *node);
 /*count function*/
 int count_recursive(const binary_tree_t *tree);
 
+/*avanced prototypes*/
+void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int));
+void level_recursively(
+	const binary_tree_t *tree, void (*func)(int), int levels);
+
 #endif
